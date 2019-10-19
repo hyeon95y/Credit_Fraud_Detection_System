@@ -41,7 +41,7 @@
 
 **Fully Connected Variational Autoencoder**
 
-![](img/model_structure.png)
+![]('img/model_structure.png')
 
 * Simple structure with 30 -> 10 -> 2 -> 10 -> 30
 * In this project, 3 methods are tested with same structure above

@@ -71,36 +71,34 @@
 - Used data from [Kaggle : Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
 - Data was splitted as below
 
-![](img/#_of_all_transactions.png)
+<img src="img/#_of_all_transcations.png" width="500">
 
-![](img/#_of_fraud_transactions.png)
+<img src="img/#_of_fraud_transactions.png" width="500">
 
 ### AUROC
 
-![](img/AUROC.png)
+<img src="img/AUROC.png" width="500">
 
 ### Accuracy
 
-![](img/Accuracy.png)
+<img src="img/Accuracy.png" width="500">
 
 ### Total Amount of Fraud in Test Set
 
-![](img/Total_Amount_of_Fraud_In_Test_Set.png)
+<img src="img/Total_Amount_of_Fraud_In_Test_Set.png" width="500">
 
 ### Total Damage in Test Set (Failed to detect)
 
-![](img/Total_Damage.png)
+<img src="img/Total_Damage.png" width="500">
 
 ### Total Penalty (False Alaram for detection x Cost to make a call for check)
 
-![](img/Total_Penalty.png)
+<img src="img/Total_Penalty.png" width="500">
 
 ### Total Loss (Damage + Penalty) (in DE minimum wage)
 
-![](img/Total_Loss_DE.png)
+<img src="img/Total_Loss_DE.png" width="500">
 
 ### Total Loss (Damage + Penalty) (in UK minimum wage)
-
-![](img/Total_Loss_UK.png)
 
 <img src="img/Total_Loss_UK.png" width="500">

@@ -71,9 +71,9 @@
 - Used data from [Kaggle : Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
 - Data was splitted as below
 
-<img src="img/#_of_all_transactions.png" width="400">
+<img src="img/number_of_all_transactions.png" width="400">
 
-<img src="img/#_of_fraud_transactions.png" width="400">
+<img src="img/number_of_fraud_transactions.png" width="400">
 
 ### AUROC
 

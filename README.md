@@ -140,7 +140,7 @@
 
 ##### Loss for fraud samples only (to maximize)
 
-<img src="img/Training_History_Anomaly_Abnormal.png" width="800">
+<img src="img/Training_History_AN_AB.png" width="800">
 
 * Y axis : reconstruction error x (-1)
   * Hence it's actually increasing

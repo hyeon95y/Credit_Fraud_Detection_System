@@ -71,29 +71,29 @@
 - Used data from [Kaggle : Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
 - Data was splitted as below
 
-<img src="img/#_of_all_transcations.png" width="500">
+<img src="img/#_of_all_transcations.png" width="400">
 
-<img src="img/#_of_fraud_transactions.png" width="500">
+<img src="img/#_of_fraud_transactions.png" width="400">
 
 ### AUROC
 
-<img src="img/AUROC.png" width="500">
+<img src="img/AUROC.png" width="400">
 
 ### Accuracy
 
-<img src="img/Accuracy.png" width="500">
+<img src="img/Accuracy.png" width="400">
 
 ### Total Amount of Fraud in Test Set
 
-<img src="img/Total_Amount_of_Fraud_In_Test_Set.png" width="500">
+<img src="img/Total_Amount_of_Fraud_In_Test_Set.png" width="400">
 
 ### Total Damage in Test Set (Failed to detect)
 
-<img src="img/Total_Damage.png" width="500">
+<img src="img/Total_Damage.png" width="400">
 
 ### Total Penalty (False Alaram for detection x Cost to make a call for check)
 
-<img src="img/Total_Penalty.png" width="500">
+<img src="img/Total_Penalty.png" width="400">
 
 ### Total Loss (Damage + Penalty) (in DE minimum wage)
 

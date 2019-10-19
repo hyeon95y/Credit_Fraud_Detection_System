@@ -103,4 +103,4 @@
 
 ![](img/Total_Loss_UK.png)
 
-<img src="img/Total_Loss_UK.png" width="400">
+<img src="img/Total_Loss_UK.png" width="500">

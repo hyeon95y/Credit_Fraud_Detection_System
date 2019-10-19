@@ -7,7 +7,7 @@
 ## Summary
 
 - Inspired by [2019 Edelman Finalist Microsoft : Prospective Dynamic Fraud Control for Optimal Profitability in e-Commerce](https://www.informs.org/Resource-Center/Video-Library/Edelman-Competition-Videos/2019-Edelman-Competition-Videos/2019-Edelman-Finalist-Microsoft)
-- From video, the importance of model management and reducing total damage from fraud are discussed
+- From the video, the importance of model management and reducing total damage from fraud are discussed
 - [Previous work : Credit Fraud Detection Model](https://github.com/hyeon95y/Credit_Card_Fraud_Detection) only concerned about AUROC, not total damage amount from fraud
   - As it only concerned about AUROC, there was no bigger penalty for fraud case which caused bigger damage
   - As model was trained as a novelty detection problem (model only learns normal sample while required to reject novelty in test set), model had no chance to learn which fraud causes bigger damage
@@ -37,11 +37,11 @@
           - £1 = €1.16
     - Time required to make a call and check transaction is done by owner or not : 5 minutes (arbitrary set)
 
-## About Models
+## Proposed Methods
 
 **Fully Connected Variational Autoencoder**
 
-![](img/model_structure.png)
+<img src="img/model_structure.png" width="400">
 
 * Simple structure with 30 -> 10 -> 2 -> 10 -> 30
 * In this project, 3 methods are tested with same structure above
@@ -63,7 +63,7 @@
       * Minimize KL Divergence for normal sample
       * Maximize **reconstruction error * fraud amount** for fraud sample (**assign bigger weight for bigger damage**)
 
-## Result
+## Experimental Results
 
 **Training proposed method is unstable, only in some random seed it showed better performance**
 
@@ -71,7 +71,7 @@
 - Used data from [Kaggle : Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
 - Data was splitted as below
 
-<img src="img/#_of_all_transcations.png" width="400">
+<img src="img/#_of_all_transactions.png" width="400">
 
 <img src="img/#_of_fraud_transactions.png" width="400">
 
@@ -102,3 +102,89 @@
 ### Total Loss (Damage + Penalty) (in UK minimum wage)
 
 <img src="img/Total_Loss_UK.png" width="500">
+
+### Training History
+
+#### 1. Novelty Detection
+
+* Random Seed : 4
+* X axis : Epochs
+* Y axis : Loss (log scale)
+
+##### Loss
+
+<img src="img/Training_History_Novelty.png" width="800">
+
+- Training process is stable
+
+#### 2. Anomaly Detection
+
+* Random Seed : 3
+* X axis : Epochs
+* Y axis : Loss (log scale)
+
+##### Total Loss
+
+<img src="img/Training_History_Anomaly_Total.png" width="800">
+
+- Minimize Reconsturction Error + KLD for normal samples
+- Maximize Reconstruction Error for abnormal samples
+
+##### Loss for normal samples only (to minimze)
+
+<img src="img/Training_History_Anomaly_Normal.png" width="800">
+
+* Due to maximizing reconstruction error for abnormal samples, after several epochs loss for normal samples also increases
+* **Weight for maximizing reconsturciton error for fraud sample should be decreased, as it disturbes model to train normal samples**
+* **Training process of maximizing reconsturction error for fraud sample it too fast so that model failes to learn normal samples properly**
+
+##### Loss for fraud samples only (to maximize)
+
+<img src="img/Training_History_Anomaly_Abnormal.png" width="800">
+
+* Y axis : reconstruction error x (-1)
+  * Hence it's actually increasing
+
+#### 3. Anomaly Detection with Fraud Amount Weighted Loss
+
+* Random Seed : 3
+* X axis : Epochs
+* Y axis : Loss (log scale)
+* It also shows similar result
+
+##### Total Loss
+
+<img src="img/Training_History_Anomaly_Weighted_Total.png" width="800">
+
+#####Loss for normal samples only (to minimze)
+
+<img src="img/Training_History_Anomaly_Weighted_Normal.png" width="800">
+
+##### Loss for fraud samples only (to maximize)
+
+<img src="img/Training_History_Anomaly_Weighted_Abnormal.png" width="800">
+
+
+
+
+
+
+
+* Random Seed : 0
+* X axis : Epochs
+* Y axis : Loss (log scale)
+* For different random seed, model showed lowest validdation loss after more epochs unlike method 1 (novelty detection) required similar number of epochs for all random seeds
+* **Therefore the weight between minimizing normal loss and maximizing abnormal loss must be fine-tuned to train model properly**
+
+##### Total Loss
+
+<img src="img/Training_History_AW_TT.png" width="800">
+
+#####Loss for normal samples only (to minimze)
+
+<img src="img/Training_History_AW_NR.png" width="800">
+
+##### Loss for fraud samples only (to maximize)
+
+<img src="img/Training_History_AW_AB.png" width="800">
+

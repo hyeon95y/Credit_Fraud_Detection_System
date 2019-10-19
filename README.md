@@ -162,7 +162,7 @@
 
 ##### Loss for fraud samples only (to maximize)
 
-<img src="img/Training_History_Anomaly_Weighted_Abnormal.png" width="800">
+<img src="img/Training_History_Anomaly_weighted_Abnormal.png" width="800">
 
 
 

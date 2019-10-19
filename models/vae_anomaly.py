@@ -70,6 +70,8 @@ class Trainer() :
         self.best_model = VAE_ANOMALY()
         self.device = device
         self.train_loss = []
+        self.train_loss_normal = []
+        self.train_loss_abnormal = []
         self.valid_loss = []
         self.batch_size = batch_size
         self.best_epoch = 0
@@ -81,7 +83,7 @@ class Trainer() :
         return recon_x
 
     
-    def fit(self, model, train_loader, valid_loader, epochs) : 
+    def fit(self, model, train_loader, valid_loader, random_state, epochs) : 
         self.lr = 1e-3
         self.optimizer = torch.optim.Adam(model.parameters(), lr=self.lr)
         
@@ -92,6 +94,8 @@ class Trainer() :
         for epoch in range(epochs) :  
             # train 
             loss_per_epoch = 0
+            loss_normal_per_epoch = 0
+            loss_abnormal_per_epoch = 0
             model.train()
 
             for x, y in train_loader :
@@ -110,34 +114,45 @@ class Trainer() :
                 mu_normal = mu[normal_index]
                 log_var_normal = log_var[normal_index]
                 
-                recon_loss = F.mse_loss(x_recon_normal, x_normal, reduction='sum')
-                kld = -0.5 * torch.sum(1 + log_var_normal - mu_normal.pow(2) - log_var_normal.exp())
-                loss = recon_loss + kld
-                loss_per_epoch += loss
-                self.optimizer.zero_grad()
-                loss.backward(retain_graph=True)
-                self.optimizer.step()
+                recon_loss_normal = F.mse_loss(x_recon_normal, x_normal, reduction='sum')
+                kld_normal = -0.5 * torch.sum(1 + log_var_normal - mu_normal.pow(2) - log_var_normal.exp())
+                
+                #### minimze recon error, kld
+                loss_normal = recon_loss_normal + kld_normal
+                
                 
                 
                 # y==1 (novelty) : maximize error            
                 if num_novelty != 0 :
-                    #print('y : ', y)
-                    #print('index of y equals 1 : ', index)
-                    #print('1 only : ', y[index])
+
                     x_novelty = x[novelty_index]
                     x_recon_novelty = x_recon[novelty_index]
                     mu_novelty = mu[novelty_index]
                     log_var_novelty = log_var[novelty_index]
                     
-                    recon_loss = F.mse_loss(x_recon_novelty, x_novelty, reduction='sum')
-                    kld = -0.5 * torch.sum(1 + log_var_novelty - mu_novelty.pow(2) - log_var_novelty.exp())
-                    loss = - (recon_loss + kld) # maximize error
-                    #loss_per_epoch += loss     # don't count on total error
-                    self.optimizer.zero_grad()
-                    loss.backward()
-                    self.optimizer.step()               
+                    recon_loss_abnormal = F.mse_loss(x_recon_novelty, x_novelty, reduction='sum')
+                    kld_abnormal = -0.5 * torch.sum(1 + log_var_novelty - mu_novelty.pow(2) - log_var_novelty.exp())
+                    
+                    #### maximize recon error only
+                    loss_abnormal = recon_loss_abnormal * (-1) 
+                    
+                # update weights
+                self.optimizer.zero_grad()
+                if num_novelty != 0 :
+                    loss = loss_normal + loss_abnormal
+                    loss_abnormal_per_epoch += loss_abnormal.item()
+                else :
+                    loss = loss_normal
+                loss.backward(retain_graph=True)
+                self.optimizer.step()
+                
+                loss_normal_per_epoch += loss_normal.item()          
+                loss_per_epoch += loss.item()
+                
                 
             self.train_loss.append(loss_per_epoch / (len(train_loader.dataset)/self.batch_size) )
+            self.train_loss_normal.append(loss_normal_per_epoch / (len(train_loader.dataset)/self.batch_size) )
+            self.train_loss_abnormal.append(loss_abnormal_per_epoch / (len(train_loader.dataset)/self.batch_size) )
 
             # validation
             loss_per_epoch = 0
@@ -166,12 +181,39 @@ class Trainer() :
             outer.update(1)    
             
         # show training history
+        
+        # plot total loss
         plt.figure(figsize=(20, 5))
         plt.plot(self.train_loss, label='train')
         plt.plot(self.valid_loss, label='valid')
         plt.axvline(self.best_epoch, label='lowest_valid_loss', c='red')
+        plt.yscale('log')
         plt.legend()
+        plt.title('Total Loss')
+        plt.savefig('training_history/anomaly/randomstate_%s_epochs_%s_history' % (random_state, epochs))
         plt.show()
+        
+        # plot normal loss only
+        plt.figure(figsize=(20, 5))
+        plt.plot(self.train_loss_normal, label='normal')
+        plt.axvline(self.best_epoch, label='lowest_valid_loss', c='red')
+        plt.yscale('log')
+        plt.legend()
+        plt.title('Normal Loss Only')
+        plt.savefig('training_history/anomaly/randomstate_%s_epochs_%s_history_normal_only' % (random_state, epochs))
+        plt.show()
+        
+        # plot abnormal loss only
+        plt.figure(figsize=(20, 5))
+        plt.plot(self.train_loss_abnormal, label='abnormal')
+        plt.axvline(self.best_epoch, label='lowest_valid_loss', c='red')
+        plt.legend()
+        plt.title('Abnormal Loss Only')
+        plt.savefig('training_history/anomaly/randomstate_%s_epochs_%s_history_abnormal_only' % (random_state, epochs))
+        plt.show()
+        print('train loss abnormal : ', self.train_loss_abnormal)
+        
+        torch.save(self.best_model.state_dict(), 'models/best_models/anomaly/model_randomstate_%s_epochs_%s.pkl' % (random_state, epochs))
         
         return
         

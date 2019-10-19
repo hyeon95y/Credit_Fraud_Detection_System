@@ -57,7 +57,7 @@ class Trainer() :
         return recon_x
 
     
-    def fit(self, model, train_loader, valid_loader, epochs) : 
+    def fit(self, model, train_loader, valid_loader, random_state, epochs) : 
         self.lr = 1e-3
         self.optimizer = torch.optim.Adam(model.parameters(), lr=self.lr)
         
@@ -115,8 +115,11 @@ class Trainer() :
         plt.plot(self.train_loss, label='train')
         plt.plot(self.valid_loss, label='valid')
         plt.axvline(self.best_epoch, label='lowest_valid_loss', c='red')
+        plt.yscale('log')
         plt.legend()
-        plt.show()
+        plt.savefig('training_history/novelty/randomstate_%s_epochs_%s_history' % (random_state, epochs))
+        #plt.show()   
+        torch.save(self.best_model.state_dict(), 'models/best_models/novelty/model_randomstate_%s_epochs_%s.pkl' % (random_state, epochs))
         
         return
         

@@ -156,7 +156,7 @@
 
 <img src="img/Training_History_Anomaly_Weighted_Total.png" width="800">
 
-#####Loss for normal samples only (to minimze)
+##### Loss for normal samples only (to minimze)
 
 <img src="img/Training_History_Anomaly_Weighted_Normal.png" width="800">
 

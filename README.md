@@ -201,5 +201,5 @@
 <img src="img/Total_Loss_UK.png" width="500">
 
 - As proposed method showed better performance in some random seed, it seems proposed method is valid
-- But as it showed in the training history, while minimizing normal error and maximizing normal error it is concerned that each maximizing reconsturction error could disturb model to learn normal samples
+- But as it showed in the training history, while minimizing normal error and maximizing normal error, it is concerned that maximizing reconsturction error could disturb model to learn normal samples
 - Therefore weight between minmizing normal error and maximizing abnormal error must be concerned to train model properly. The weight between to losses is hyperparameter for this method and must be tuned

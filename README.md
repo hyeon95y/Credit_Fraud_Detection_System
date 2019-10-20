@@ -180,7 +180,7 @@
 
 <img src="img/Training_History_AW_TT.png" width="800">
 
-#####Loss for normal samples only (to minimze)
+##### Loss for normal samples only (to minimze)
 
 <img src="img/Training_History_AW_NR.png" width="800">
 
